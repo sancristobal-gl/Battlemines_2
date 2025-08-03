@@ -1,0 +1,4 @@
+build/_deps/googletest*
+build/_deps/benchmark*
+build-clang/_deps/googletest*
+build-clang/_deps/benchmark*

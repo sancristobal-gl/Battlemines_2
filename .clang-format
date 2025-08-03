@@ -1,0 +1,92 @@
+################################################################################
+Language                                  : Cpp
+BasedOnStyle                              : Google
+Standard                                  : Cpp11
+################################################################################
+AccessModifierOffset                      : -4
+AlignAfterOpenBracket                     : DontAlign
+AlignConsecutiveAssignments               : false
+AlignEscapedNewlines                      : Left
+AlignTrailingComments                     : true
+AllowAllParametersOfDeclarationOnNextLine : false
+AllowShortBlocksOnASingleLine             : false
+AllowShortFunctionsOnASingleLine          : Empty
+AllowShortIfStatementsOnASingleLine       : false
+AllowShortLambdasOnASingleLine            : All
+
+AllowShortLoopsOnASingleLine              : false
+AlwaysBreakTemplateDeclarations           : true
+
+BinPackArguments                          : true
+BinPackParameters                         : false
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+
+BreakBeforeBinaryOperators                : All #NonAssignment
+BreakBeforeTernaryOperators               : true
+BreakConstructorInitializers              : BeforeComma
+BreakInheritanceList                      : AfterColon
+ColumnLimit                               : 160
+CompactNamespaces                         : false
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+
+ConstructorInitializerIndentWidth: 0
+
+Cpp11BracedListStyle                      : true
+DerivePointerAlignment                    : false
+ExperimentalAutoDetectBinPacking          : false
+FixNamespaceComments                      : true
+
+IncludeBlocks : Regroup
+IncludeCategories:
+  - Regex:           '"([A-Za-z0-9.\Q/-_\E])+"'
+    Priority:        1
+  - Regex:           '^<(gtest|gmock)'
+    Priority:        30
+  - Regex:           '\.h>'
+    Priority:        99
+  - Regex:           '.*'
+    Priority:        100
+
+IndentCaseLabels                          : false
+IndentWidth                               : 4
+KeepEmptyLinesAtTheStartOfBlocks          : false
+MaxEmptyLinesToKeep                       : 2
+NamespaceIndentation                      : None
+PointerAlignment                          : Left
+QualifierAlignment                        : Right
+ReflowComments                            : false
+SortUsingDeclarations                     : true
+SpaceAfterCStyleCast                      : false
+SpaceAfterTemplateKeyword                 : true
+SpaceBeforeAssignmentOperators            : true
+SpaceBeforeCpp11BracedList                : false
+SpaceBeforeInheritanceColon               : true
+SpaceBeforeParens                         : ControlStatements
+SpaceBeforeRangeBasedForLoopColon         : true
+SpaceInEmptyParentheses                   : false
+SpacesBeforeTrailingComments              : 1
+SpacesInAngles                            : false
+SpacesInCStyleCastParentheses             : false
+SpacesInContainerLiterals                 : false
+SpacesInParentheses                       : false
+SpacesInSquareBrackets                    : false
+TabWidth                                  : 4
+UseTab                                    : Never
+################################################################################

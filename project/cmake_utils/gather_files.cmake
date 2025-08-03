@@ -1,0 +1,11 @@
+include("cmake_utils/exclude_files.cmake")
+
+function(gather_files dest recursive include_patterns exclude_patterns)
+    if (NOT ${recursive})
+        file(GLOB ${dest} ${include_patterns})
+    else()
+        file(GLOB_RECURSE ${dest} ${include_patterns})
+    endif()
+    exclude_files(${dest} "${exclude_patterns}")
+    set(${dest} ${${dest}} PARENT_SCOPE)
+endfunction(gather_files)

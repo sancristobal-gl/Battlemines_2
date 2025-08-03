@@ -1,0 +1,6 @@
+include("cmake_utils/setup_visual_studio_filters.cmake")
+include("cmake_utils/gather_files.cmake")
+include("cmake_utils/gather_subdirs.cmake")
+include("cmake_utils/configure_subprojects.cmake")
+include("cmake_utils/fill_platform_excludes.cmake")
+include("cmake_utils/enable_warnings.cmake")
