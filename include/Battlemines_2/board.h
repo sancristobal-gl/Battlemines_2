@@ -5,6 +5,15 @@
 #include <unordered_set>
 #include <vector>
 
+const int minWidth = 5;
+const int maxWidth = 20;
+const int minHeight = 5;
+const int maxHeight = 20;
+const int minMineCount = 3;
+const int maxMineCount = 8;
+const int minPlayerCount = 2;
+const int maxPlayerCount = 8;
+
 struct Position {
 	unsigned int xpos = 0;
 	unsigned int ypos = 0;
@@ -27,7 +36,7 @@ struct Mine {
 
 struct Player {
 	int id = -1;
-	int mineCount = 0;
+	unsigned int mineCount = 0;
 	bool operator==(const Player b) {
 		return (id == b.id);
 	}
@@ -41,8 +50,8 @@ enum gameType {
 };
 
 struct Board {
-	int width = 0;
-	int height = 0;
+	unsigned int width = 0;
+	unsigned int height = 0;
 	std::unordered_set<Position, PositionHash> disabledPositions;
 	std::vector<Player> players;
 	int playerCount = 0;
@@ -51,11 +60,15 @@ struct Board {
 	~Board();
 };
 
+Board createBoard(int gameTypeValue, int width, int height, int mineCount, int playerCount);
+
 typedef int (*RNGPointer)(int, int);
 
 int getRandomValueInRange(int max, int min);
 
 Position getRandomValidPosition(Board const &board, Player const &player, RNGPointer RNG);
+
+void placeMine(Board &board, Mine mine);
 
 bool isPositionValid(Board const &board, Position const &pos);
 
