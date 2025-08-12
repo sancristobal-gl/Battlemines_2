@@ -1,11 +1,13 @@
 #include "board.h"
 #include <functional>
 
+typedef Position (*userInputPointer)(Board const &, Player , RNGPointer );
+
 void awaitUserInput(gameType gameType);
 
 Board createBoard();
 
-Position getPlayerInput(Board const &board, Player player, RNGPointer RNG) ;
+Position getPlayerInputPosition(Board const &board, Player player, RNGPointer RNG) ;
 
 void printToPlayer(Player const &player, std::string const &message);
 

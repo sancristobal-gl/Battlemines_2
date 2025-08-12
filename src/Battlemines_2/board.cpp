@@ -12,6 +12,37 @@ bool Mine::operator==(const Position &b) const {
 	return ((position.xpos == b.xpos) && (position.ypos == b.ypos));
 }
 
+bool isValueWithinRange(int value, int min, int max) {
+	try {
+		if(value < min || value > max){
+			throw value;
+		}
+	} catch(int value) {
+		std::cout << "Value of createBoard parameter is out of range" << "\n";
+		std::cout << "Value is " << value << ", minimum is " << min << ", max is " << max << "\n";
+	}
+}
+
+Board createBoard(int gameTypeValue, int width, int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
+	isValueWithinRange(width, minWidth, maxWidth);
+	isValueWithinRange(height, minHeight, maxHeight);
+	isValueWithinRange(mineCount, minMineCount, maxMineCount);
+	isValueWithinRange(playerCount, minPlayerCount, maxPlayerCount);
+	Board board;
+	board.gameType = static_cast<gameType>(gameTypeValue);
+	board.width = width;
+	board.height = height;
+	board.playerCount = playerCount;
+	for (int p = 0; p < board.playerCount; p++) {
+		Player player;
+		player.mineCount = mineCount;
+		player.id = p + 1;
+		player.isAI = ((board.gameType == PVE) && (p > 0)) || (board.gameType == EVE);
+		board.players.push_back(player);
+	}
+	return board;
+}
+
 Board::~Board() {
 	// used to have memory deallocation
 	// preserving just in case
@@ -41,6 +72,10 @@ Position getRandomValidPosition(Board const &board, Player const &player, RNGPoi
 	return validTiles[RNG(validTiles.size(), 0)];
 }
 
+void placeMine(Board &board, Mine mine) {
+	board.placedMines.push_back(mine);
+}
+
 bool isPositionValid(Board const &board, Position const &pos) { // check if pos if withing acceptable values
 	// If the position is outside the board, return false;
 	if ((pos.xpos < 1) || (pos.ypos < 1) || (pos.xpos > board.width) || (pos.ypos > board.height)) {
@@ -57,11 +92,9 @@ bool isPositionValid(Board const &board, Position const &pos) { // check if pos 
 }
 
 int getPlayerPositionInArray(Board const &board, int playerID) { // defined in case the player.ID format changes in the future
-    for (int i = 0; i < board.players.size(); i++)
-    {
-        if (board.players[i].id == playerID)
-        {
-            return i;
+	for (int i = 0; i < board.players.size(); i++) {
+		if (board.players[i].id == playerID) {
+			return i;
 		}
 	}
 	return -1;
@@ -105,10 +138,9 @@ bool removeMine(Board &board, Mine mine) {
 	for (auto it = board.placedMines.begin(); it != board.placedMines.end(); it++) {
 		if (*it == mine) {
 			board.placedMines.erase(it);
-            int mineOwnerIndex = getPlayerPositionInArray(board, mine.owner);
-            if (mineOwnerIndex >= 0)
-            {
-                board.players[getPlayerPositionInArray(board, mine.owner)].mineCount--;
+			int mineOwnerIndex = getPlayerPositionInArray(board, mine.owner);
+			if (mineOwnerIndex >= 0) {
+				board.players[getPlayerPositionInArray(board, mine.owner)].mineCount--;
 			}
 			disablePosition(board, mine);
 			return true;
@@ -150,14 +182,14 @@ int gameEndCondition(Board &board) {
 	if (board.playerCount == 1) return board.players[0].id; // player wins if they're the only one remaining
 	if (board.playerCount == 0) return cDraw;				// if no players remain, game is a draw
 	// check if there are enough tiles to accomodate every player's mines, if not, the game is a draw
-	int maxPlayerMines = 0;
+	unsigned int maxPlayerMines = 0;
 	for (Player const &player: board.players) {
 		if (player.mineCount > maxPlayerMines) {
 			maxPlayerMines = player.mineCount;
 		}
 	}
 	unsigned int tilesRemaining = getValidTiles(board).size();
-	std::cout << "tiles remaining: " << tilesRemaining << std::endl;
+	std::cout << "tiles remaining: " << tilesRemaining << "\n";
 	if ((tilesRemaining < maxPlayerMines) || (getValidTiles(board).size() < board.playerCount)) { // if not enough tiles remain for another turn, the player with the most mines remaining wins
 		Player playerWithMaxMines;
 		int winner = 0;
@@ -169,8 +201,8 @@ int gameEndCondition(Board &board) {
 				winner = 0;
 			}
 		}
-		std::cout << "Not enough tiles remain to continue playing, the player with the greatest amount of mines remaining is the winner" << std::endl;
-		std::cout << "(Unless two or more players share the highest mine count, in which case it's a draw)" << std::endl;
+		std::cout << "Not enough tiles remain to continue playing, the player with the greatest amount of mines remaining is the winner" << "\n";
+		std::cout << "(Unless two or more players share the highest mine count, in which case it's a draw)" << "\n";
 		return winner;
 	}
 	return cNoWinner; // else, the game is not over

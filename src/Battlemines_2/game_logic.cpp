@@ -2,44 +2,8 @@
 
 // gets input from console if player is human
 // generates random input if player is bot
-Board createBoard() {
-	Board board;
-	bool created = false;
-	int width = 0;
-	int height = 0;
-	int mineCount = 0;
-	board.gameType = static_cast<gameType>(getValuesWithinRange("choose game mode (0=PVP, 1=PVE, 2=EVE)", 0, 2)); // not sure if this is good practice
-	board.width = getValuesWithinRange("choose the width of the field", 5, 20);
-	board.height = getValuesWithinRange("choose the height of the field", 5, 20);
-	mineCount = getValuesWithinRange("choose the number of mines on the field", 3, 8);
-	board.playerCount = getValuesWithinRange("choose the number of players", 2, 8);
-	for (int p = 0; p < board.playerCount; p++) {
-		Player player;
-		player.mineCount = mineCount;
-		player.id = p + 1;
-		player.isAI = ((board.gameType == PVE) && (p > 0)) || (board.gameType == EVE);
-		board.players.push_back(player);
-	}
-	return board;
-}
 
-Board createBoard(int gameTypeValue, int width, int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
-	Board board;
-	board.gameType = static_cast<gameType>(gameTypeValue);
-	board.width = width;
-	board.height = height;
-	board.playerCount = playerCount;
-	for (int p = 0; p < board.playerCount; p++) {
-		Player player;
-		player.mineCount = mineCount;
-		player.id = p + 1;
-		player.isAI = ((board.gameType == PVE) && (p > 0)) || (board.gameType == EVE);
-		board.players.push_back(player);
-	}
-	return board;
-}
-
-void chooseMinePositions(Board &board, Player &player, RNGPointer RNG) {
+void chooseMinePositions(Board &board, Player &player, RNGPointer RNG, userInputPointer getPlayerInput) {
 	printToPlayer(player, std::string("Player ") + std::to_string(player.id) + std::string("!, choose your mine's positions"));
 	for (int mineId = 0; mineId < player.mineCount; mineId++) {
 		if (!player.isAI) {
@@ -62,16 +26,16 @@ void chooseMinePositions(Board &board, Player &player, RNGPointer RNG) {
 				}
 			}
 		}
-		// std::cout << "Player " << mine.owner+1 <<  " placed mine at " << mine.xpos << ", " << mine.ypos << std::endl; //for testing purposes, TODO: remove before main release
-		board.placedMines.push_back(mine);
+		// std::cout << "Player " << mine.owner+1 <<  " placed mine at " << mine.xpos << ", " << mine.ypos << "\n"; //for testing purposes, TODO: remove before main release
+		placeMine(board, mine);
 	}
 	awaitUserInput(board.gameType);
 }
 
-void guess(Board &board, Player &player, RNGPointer RNG) {
+bool guess(Board &board, Player &player, RNGPointer RNG, userInputPointer getPlayerInput) {
 	printBoard(board, player.id);
 	Position guess;
-	int isGuessValid = false; // flag to check if the inputed position is valid. If not, ask the player again
+	bool isGuessValid = false; // flag to check if the inputed position is valid. If not, ask the player again
 	while (isGuessValid == false) {
 		printToPlayer(player, (std::string("Player ") + std::to_string(player.id) + std::string(", take a guess... ")));
 		guess = getPlayerInput(board, player, RNG);
@@ -81,19 +45,23 @@ void guess(Board &board, Player &player, RNGPointer RNG) {
 		}
 	}
 	// check if the guessed position shares the same position as a mine
+	bool guessedMine = false; // is true if a mine was found
 	std::vector<Mine> minesToRemove;
 	for (Mine const &mine: board.placedMines) {
 		if (mine == guess) {
 			if (mine.owner == player.id) {
 				printToPlayer(player, "That's your own mine, silly!"); // el jugador pierde la oportunidad de volver a adivinar
+				
 			} else {
 				removeMine(board, mine);
 				printToPlayer(player, "You found an enemy mine!");
-				break;
 			}
+			guessedMine = true;
+			break;
 		}
 	}
 	disablePosition(board, guess);
+	return guessedMine;
 }
 
 // function to be called after each player has placed their mines
@@ -114,8 +82,8 @@ bool checkMineCollision(Board &board) {
 			}
 		}
 		if (conflictingMines.size() > 1) {
-			i--;																																																		   // i is -- since the current element is to be deleted, meaning the "next" iteration should check the element that will take i's place
-			std::cout << std::string("Colisionaron ") << conflictingMines.size() << std::string(" minas en ") << conflictingMines[0].position.xpos << std::string(", ") << conflictingMines[0].position.ypos << std::endl; // conflictingMines will always have a value at [0]
+			i--;																																																	  // i is -- since the current element is to be deleted, meaning the "next" iteration should check the element that will take i's place
+			std::cout << std::string("Colisionaron ") << conflictingMines.size() << std::string(" minas en ") << conflictingMines[0].position.xpos << std::string(", ") << conflictingMines[0].position.ypos << "\n"; // conflictingMines will always have a value at [0]
 			for (Mine const &mine: conflictingMines) {
 				removeMine(board, mine);
 				wasThereCollision = true;
