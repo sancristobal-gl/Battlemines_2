@@ -205,5 +205,6 @@ int gameEndCondition(Board &board) {
 		std::cout << "(Unless two or more players share the highest mine count, in which case it's a draw)" << "\n";
 		return winner;
 	}
+
 	return cNoWinner; // else, the game is not over
 }
