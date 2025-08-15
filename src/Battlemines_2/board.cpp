@@ -13,21 +13,21 @@ bool Mine::operator==(const Position &b) const {
 }
 
 bool isValueWithinRange(int value, int min, int max) {
-	try {
-		if(value < min || value > max){
-			throw value;
-		}
-	} catch(int value) {
-		std::cout << "Value of createBoard parameter is out of range" << "\n";
-		std::cout << "Value is " << value << ", minimum is " << min << ", max is " << max << "\n";
-	}
+	return (value >= min || value <= max);
 }
 
-Board createBoard(int gameTypeValue, int width, int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
-	isValueWithinRange(width, minWidth, maxWidth);
-	isValueWithinRange(height, minHeight, maxHeight);
-	isValueWithinRange(mineCount, minMineCount, maxMineCount);
-	isValueWithinRange(playerCount, minPlayerCount, maxPlayerCount);
+bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount){
+	if (!isValueWithinRange(width, minWidth, maxWidth)) return false;
+	if (!isValueWithinRange(height, minHeight, maxHeight)) return false;
+	if (!isValueWithinRange(mineCount, minMineCount, maxMineCount)) return false;
+	if (!isValueWithinRange(playerCount, minPlayerCount, maxPlayerCount)) return false;
+	return true;
+}
+
+Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
+	if (!isInputValid){
+		throw std::exception("loco no tires parametros que no estan dentro de los rangos definidos");
+	}
 	Board board;
 	board.gameType = static_cast<gameType>(gameTypeValue);
 	board.width = width;
