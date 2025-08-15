@@ -25,7 +25,7 @@ bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, in
 }
 
 Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
-	if (!isInputValid){
+	if (!isInputValid(gameTypeValue, width, height, mineCount, playerCount)){
 		throw std::exception("Board parameters are invalid");
 	}
 	Board board;
