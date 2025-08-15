@@ -17,10 +17,10 @@ bool isValueWithinRange(int value, int min, int max) {
 }
 
 bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount){
-	if (!isValueWithinRange(width, minWidth, maxWidth)) return false;
-	if (!isValueWithinRange(height, minHeight, maxHeight)) return false;
-	if (!isValueWithinRange(mineCount, minMineCount, maxMineCount)) return false;
-	if (!isValueWithinRange(playerCount, minPlayerCount, maxPlayerCount)) return false;
+	if (!isValueWithinRange(width, MINWIDTH, MAXWIDTH)) return false;
+	if (!isValueWithinRange(height, MINHEIGHT, MAXHEIGHT)) return false;
+	if (!isValueWithinRange(mineCount, MINMINECOUNT, MAXMINECOUNT)) return false;
+	if (!isValueWithinRange(playerCount, MINPLAYERCOUNT, MAXPLAYERCOUNT)) return false;
 	return true;
 }
 
