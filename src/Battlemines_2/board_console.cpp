@@ -18,24 +18,17 @@ void awaitUserInput(gameType gameType) {
 }
 
 Board createBoard() {
-	Board board;
-	bool created = false;
-	int width = 0;
-	int height = 0;
-	int mineCount = 0;
-	board.gameType = static_cast<gameType>(getValuesWithinRange("choose game mode (0=PVP, 1=PVE, 2=EVE)", 0, 2)); // not sure if this is good practice
-	board.width = getValuesWithinRange("choose the width of the field", 5, 20);
-	board.height = getValuesWithinRange("choose the height of the field", 5, 20);
+	int type = 0;
+	int width = 5;
+	int height = 5;
+	int mineCount = 3;
+	int playerCount = 2;
+	type = (getValuesWithinRange("choose game mode (0=PVP, 1=PVE, 2=EVE)", 0, 2)); // not sure if this is good practice
+	width = getValuesWithinRange("choose the width of the field", 5, 20);
+	height = getValuesWithinRange("choose the height of the field", 5, 20);
 	mineCount = getValuesWithinRange("choose the number of mines on the field", 3, 8);
-	board.playerCount = getValuesWithinRange("choose the number of players", 2, 8);
-	for (int p = 0; p < board.playerCount; p++) {
-		Player player;
-		player.mineCount = mineCount;
-		player.id = p + 1;
-		player.isAI = ((board.gameType == PVE) && (p > 0)) || (board.gameType == EVE);
-		board.players.push_back(player);
-	}
-	return board;
+	playerCount = getValuesWithinRange("choose the number of players", 2, 8);
+	return createBoard(type, width, height, mineCount, playerCount);
 }
 
 namespace boardConsoleDisplayHelper {
