@@ -5,14 +5,14 @@
 #include <unordered_set>
 #include <vector>
 
-const int minWidth = 5;
-const int maxWidth = 20;
-const int minHeight = 5;
-const int maxHeight = 20;
-const int minMineCount = 3;
-const int maxMineCount = 8;
-const int minPlayerCount = 2;
-const int maxPlayerCount = 8;
+static constexpr int minWidth = 5;
+static constexpr int maxWidth = 20;
+static constexpr int minHeight = 5;
+static constexpr int maxHeight = 20;
+static constexpr int minMineCount = 3;
+static constexpr int maxMineCount = 8;
+static constexpr int minPlayerCount = 2;
+static constexpr int maxPlayerCount = 8;
 
 struct Position {
 	unsigned int xpos = 0;
@@ -54,7 +54,7 @@ struct Board {
 	unsigned int height = 0;
 	std::unordered_set<Position, PositionHash> disabledPositions;
 	std::vector<Player> players;
-	int playerCount = 0;
+	unsigned int playerCount = 0;
 	std::vector<Mine> placedMines;
 	gameType gameType = PVP;
 	~Board();
