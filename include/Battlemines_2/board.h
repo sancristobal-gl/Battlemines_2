@@ -5,14 +5,14 @@
 #include <unordered_set>
 #include <vector>
 
-static constexpr int minWidth = 5;
-static constexpr int maxWidth = 20;
-static constexpr int minHeight = 5;
-static constexpr int maxHeight = 20;
-static constexpr int minMineCount = 3;
-static constexpr int maxMineCount = 8;
-static constexpr int minPlayerCount = 2;
-static constexpr int maxPlayerCount = 8;
+static constexpr int MINWIDTH = 5;
+static constexpr int MAXWIDTH = 20;
+static constexpr int MINHEIGHT = 5;
+static constexpr int MAXHEIGHT = 20;
+static constexpr int MINMINECOUNT = 3;
+static constexpr int MAXMINECOUNT = 8;
+static constexpr int MINPLAYERCOUNT = 2;
+static constexpr int MAXPLAYERCOUNT = 8;
 
 struct Position {
 	unsigned int xpos = 0;
@@ -60,7 +60,7 @@ struct Board {
 	~Board();
 };
 
-Board createBoard(int gameTypeValue, int width, int height, int mineCount, int playerCount);
+Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount);
 
 typedef int (*RNGPointer)(int, int);
 
