@@ -26,7 +26,7 @@ bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, in
 
 Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
 	if (!isInputValid){
-		throw std::exception("loco no tires parametros que no estan dentro de los rangos definidos");
+		throw std::exception("Board parameters are invalid");
 	}
 	Board board;
 	board.gameType = static_cast<gameType>(gameTypeValue);
