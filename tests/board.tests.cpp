@@ -154,3 +154,17 @@ TEST(OperatorTests, Mine_EQ_Position) {
 	p = Position{20, 10};
 	EXPECT_NE(m, p);
 }
+
+TEST(BoardTest, board_creation) {
+	constexpr int gameTypeValue = -2;
+	constexpr int width = -20;
+	constexpr int height = -20;
+	constexpr int mineCount = -3;
+	constexpr int playerCount = -8;
+	Board board = createBoard(gameTypeValue, width, height, mineCount, playerCount);
+	EXPECT_EQ(board.gameType, static_cast<gameType>(gameTypeValue));
+	ASSERT_TRUE(board.width == width);
+	ASSERT_TRUE(board.height == height);
+	ASSERT_TRUE(board.players.front().mineCount == mineCount);
+	ASSERT_TRUE(board.playerCount == playerCount);
+}
