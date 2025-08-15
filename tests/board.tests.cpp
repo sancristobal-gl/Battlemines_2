@@ -56,3 +56,101 @@ TEST(End, game_doesnt_end_when_end_conditions_arent_met) {
 	eliminatePlayers(board);
 	ASSERT_EQ(gameEndCondition(board), -1);
 }
+
+TEST(OperatorTests, position_EQ_position) {
+	using XType = decltype(Position{}.xpos);
+	using YType = decltype(Position{}.ypos);
+
+	Position p1{}, p2{};
+
+	// Equal cases
+	p1 = Position{0, 0};
+	p2 = Position{0, 0};
+	EXPECT_EQ(p1, p2);
+
+	p1 = Position{1, 0};
+	p2 = Position{1, 0};
+	EXPECT_EQ(p1, p2);
+
+	p1 = Position{0, 1};
+	p2 = Position{0, 1};
+	EXPECT_EQ(p1, p2);
+
+	p1 = Position{1, 1};
+	p2 = Position{1, 1};
+	EXPECT_EQ(p1, p2);
+
+	p1 = Position{std::numeric_limits<XType>::max(), std::numeric_limits<YType>::max()};
+	p2 = Position{std::numeric_limits<XType>::max(), std::numeric_limits<YType>::max()};
+	EXPECT_EQ(p1, p2);
+
+	p1 = Position{std::numeric_limits<XType>::min(), std::numeric_limits<YType>::min()};
+	p2 = Position{std::numeric_limits<XType>::min(), std::numeric_limits<YType>::min()};
+	EXPECT_EQ(p1, p2);
+
+	// Not equal cases — use EXPECT_NE
+	p1 = Position{1, 0};
+	p2 = Position{0, 1};
+	EXPECT_NE(p1, p2);
+
+	p1 = Position{0, 1};
+	p2 = Position{1, 0};
+	EXPECT_NE(p1, p2);
+
+	p1 = Position{1, 1};
+	p2 = Position{0, 1};
+	EXPECT_NE(p1, p2);
+
+	p1 = Position{std::numeric_limits<XType>::min(), std::numeric_limits<YType>::max()};
+	p2 = Position{std::numeric_limits<XType>::max(), std::numeric_limits<YType>::min()};
+	EXPECT_NE(p1, p2);
+}
+
+TEST(OperatorTests, mine_EQ_mine) {
+	using XType = decltype(Position{}.xpos);
+	using YType = decltype(Position{}.ypos);
+	Mine m1{};
+	Mine m2{};
+
+	// Equal mines
+	m1 = Mine{{0, 0}, 1};
+	m2 = Mine{{0, 0}, 1};
+	EXPECT_EQ(m1, m2);
+
+	m1 = Mine{{std::numeric_limits<XType>::max(), std::numeric_limits<XType>::max()}, 5};
+	m2 = Mine{{std::numeric_limits<XType>::max(), std::numeric_limits<XType>::max()}, 5};
+	EXPECT_EQ(m1, m2);
+
+	// Different position, same owner
+	m1 = Mine{{1, 0}, 1};
+	m2 = Mine{{0, 0}, 1};
+	EXPECT_NE(m1, m2);
+
+	// Same Position, different owner
+	m1 = Mine{{0, 0}, 1};
+	m2 = Mine{{0, 0}, 2};
+	EXPECT_NE(m1, m2);
+}
+
+TEST(OperatorTests, Mine_EQ_Position) {
+	using XType = decltype(Position{}.xpos);
+	using YType = decltype(Position{}.ypos);
+
+	Mine m{};
+	Position p{};
+
+	// Equal position
+	m = Mine{Position{10, 20}, 1};
+	p = Position{10, 20};
+	EXPECT_EQ(m, p);
+
+	// Max values
+	m = Mine{Position{std::numeric_limits<XType>::max(), std::numeric_limits<YType>::max()}, 7};
+	p = Position{std::numeric_limits<XType>::max(), std::numeric_limits<YType>::max()};
+	EXPECT_EQ(m, p);
+
+	// Not equal
+	m = Mine{Position{10, 20}, 1};
+	p = Position{20, 10};
+	EXPECT_NE(m, p);
+}
