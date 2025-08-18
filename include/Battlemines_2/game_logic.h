@@ -8,8 +8,8 @@
 #include <vector>
 #include <optional>
 
-void chooseMinePositions(Board &board, Player &player, RNGPointer RNG, userInputPointer getPlayerInput);
+void chooseMinePositions(Board &board, Player &player, RNGPointer RNG, userInputFunctionPointer getPlayerInput);
 
-bool guess(Board &board, Player &player, RNGPointer RNG, userInputPointer getPlayerInput);
+bool guess(Board &board, Player &player, RNGPointer RNG, userInputFunctionPointer getPlayerInput);
 
 bool checkMineCollision(Board &board);

@@ -9,7 +9,7 @@ void gameStages::roundStart(Board const &board) {
 	awaitUserInput(board.gameType);
 }
 
-int gameStages::minePlacement(Board &board, RNGPointer RNG, userInputPointer getPlayerInput) {
+int gameStages::minePlacement(Board &board, RNGPointer RNG, userInputFunctionPointer getPlayerInput) {
 	for (Player &p: board.players) {
 		std::cout << "Player " << p.id << "'s turn to place their mines:" << std::endl;
 		chooseMinePositions(board, p, RNG, getPlayerInput);
@@ -27,7 +27,7 @@ unsigned int getGuessAmount(unsigned int playerCount) { // players have guesses 
 	return ceil(log2(playerCount)); // currently, players<=2 have 1 guess, <=4 have 2 guesses, 8<= have 3
 }
 
-int gameStages::guessing(Board &board, RNGPointer RNG, userInputPointer getPlayerInput) {
+int gameStages::guessing(Board &board, RNGPointer RNG, userInputFunctionPointer getPlayerInput) {
 	for (Player &p: board.players) {
 		printToPlayer(p, std::string("Player ") + std::to_string(p.id) + std::string("'s turn to guess:"));
 		printToPlayer(p, std::string("You've got ") + std::to_string(getGuessAmount(board.playerCount)) + std::string(" guesses"));

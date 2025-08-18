@@ -3,7 +3,7 @@
 // gets input from console if player is human
 // generates random input if player is bot
 
-void chooseMinePositions(Board &board, Player &player, RNGPointer RNG, userInputPointer getPlayerInput) {
+void chooseMinePositions(Board &board, Player &player, RNGPointer RNG, userInputFunctionPointer getPlayerInput) {
 	printToPlayer(player, std::string("Player ") + std::to_string(player.id) + std::string("!, choose your mine's positions"));
 	for (int mineId = 0; mineId < player.mineCount; mineId++) {
 		if (!player.isAI) {
@@ -26,13 +26,12 @@ void chooseMinePositions(Board &board, Player &player, RNGPointer RNG, userInput
 				}
 			}
 		}
-		// std::cout << "Player " << mine.owner+1 <<  " placed mine at " << mine.xpos << ", " << mine.ypos << "\n"; //for testing purposes, TODO: remove before main release
 		placeMine(board, mine);
 	}
 	awaitUserInput(board.gameType);
 }
 
-bool guess(Board &board, Player &player, RNGPointer RNG, userInputPointer getPlayerInput) {
+bool guess(Board &board, Player &player, RNGPointer RNG, userInputFunctionPointer getPlayerInput) {
 	printBoard(board, player.id);
 	Position guess;
 	bool isGuessValid = false; // flag to check if the inputed position is valid. If not, ask the player again
@@ -83,7 +82,7 @@ bool checkMineCollision(Board &board) {
 		}
 		if (conflictingMines.size() > 1) {
 			i--;																																																	  // i is -- since the current element is to be deleted, meaning the "next" iteration should check the element that will take i's place
-			std::cout << std::string("Colisionaron ") << conflictingMines.size() << std::string(" minas en ") << conflictingMines[0].position.xpos << std::string(", ") << conflictingMines[0].position.ypos << "\n"; // conflictingMines will always have a value at [0]
+			std::cout << std::string("Colisionaron ") << conflictingMines.size() << std::string(" minas en ") << conflictingMines[0].position.xpos << std::string(", ") << conflictingMines[0].position.ypos << '\n'; // conflictingMines will always have a value at [0]
 			for (Mine const &mine: conflictingMines) {
 				removeMine(board, mine);
 				wasThereCollision = true;

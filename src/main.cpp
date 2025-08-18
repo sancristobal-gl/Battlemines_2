@@ -13,7 +13,7 @@ unsigned int initRand(std::optional<unsigned int> customSeed = std::nullopt) { /
 	srand(seed);
 	return seed;
 }
-int gameLoop(Board &board, RNGPointer RNG, userInputPointer getPlayerInput) {
+int gameLoop(Board &board, RNGPointer RNG, userInputFunctionPointer getPlayerInput) {
 	/*
 	winner = 0, tie
 	winner = 1, player 1 won
@@ -44,12 +44,12 @@ int main() {
 #else
 	Board board = createBoard();
 #endif
-	userInputPointer getPlayerInput = getPlayerInputPosition;
+	userInputFunctionPointer getPlayerInput = getPlayerInputPosition;
 	RNGPointer RNG = getRandomValueInRange; //pointer to random number generator function
 	int winner = gameLoop(board, RNG, getPlayerInput);
 	if (winner != 0) {
-		std::cout << "The winner is: player " << winner << ", Congratulations!" << "\n";
+		std::cout << "The winner is: player " << winner << ", Congratulations!\n";
 	} else {
-		std::cout << "The game is a draw!" << "\n";
+		std::cout << "The game is a draw!\n";
 	}
 }

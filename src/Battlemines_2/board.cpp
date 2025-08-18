@@ -13,21 +13,21 @@ bool Mine::operator==(const Position &b) const {
 }
 
 bool isValueWithinRange(int value, int min, int max) {
-	try {
-		if(value < min || value > max){
-			throw value;
-		}
-	} catch(int value) {
-		std::cout << "Value of createBoard parameter is out of range" << "\n";
-		std::cout << "Value is " << value << ", minimum is " << min << ", max is " << max << "\n";
-	}
+	return (value >= min || value <= max);
 }
 
-Board createBoard(int gameTypeValue, int width, int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
-	isValueWithinRange(width, minWidth, maxWidth);
-	isValueWithinRange(height, minHeight, maxHeight);
-	isValueWithinRange(mineCount, minMineCount, maxMineCount);
-	isValueWithinRange(playerCount, minPlayerCount, maxPlayerCount);
+bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount){
+	if (!isValueWithinRange(width, MINWIDTH, MAXWIDTH)) return false;
+	if (!isValueWithinRange(height, MINHEIGHT, MAXHEIGHT)) return false;
+	if (!isValueWithinRange(mineCount, MINMINECOUNT, MAXMINECOUNT)) return false;
+	if (!isValueWithinRange(playerCount, MINPLAYERCOUNT, MAXPLAYERCOUNT)) return false;
+	return true;
+}
+
+Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
+	if (!isInputValid(gameTypeValue, width, height, mineCount, playerCount)){
+		throw std::exception("Board parameters are invalid");
+	}
 	Board board;
 	board.gameType = static_cast<gameType>(gameTypeValue);
 	board.width = width;
@@ -189,7 +189,7 @@ int gameEndCondition(Board &board) {
 		}
 	}
 	unsigned int tilesRemaining = getValidTiles(board).size();
-	std::cout << "tiles remaining: " << tilesRemaining << "\n";
+	std::cout << "tiles remaining: " << tilesRemaining << '\n';
 	if ((tilesRemaining < maxPlayerMines) || (getValidTiles(board).size() < board.playerCount)) { // if not enough tiles remain for another turn, the player with the most mines remaining wins
 		Player playerWithMaxMines;
 		int winner = 0;
@@ -201,9 +201,10 @@ int gameEndCondition(Board &board) {
 				winner = 0;
 			}
 		}
-		std::cout << "Not enough tiles remain to continue playing, the player with the greatest amount of mines remaining is the winner" << "\n";
-		std::cout << "(Unless two or more players share the highest mine count, in which case it's a draw)" << "\n";
+		std::cout << "Not enough tiles remain to continue playing, the player with the greatest amount of mines remaining is the winner\n";
+		std::cout << "(Unless two or more players share the highest mine count, in which case it's a draw)\n";
 		return winner;
 	}
+
 	return cNoWinner; // else, the game is not over
 }
