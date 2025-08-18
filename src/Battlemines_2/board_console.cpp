@@ -10,7 +10,7 @@ void awaitUserInput(gameType gameType) {
 	std::cin.clear();
 	// std::cin.ignore(std::numeric_limits<std::streamsize>::max()); // causes "enter" to have to be pressed twice before proceeding
 	if (gameType != EVE) {
-		std::cout << "Press enter to continue" << "\n";
+		std::cout << "Press enter to continue\n";
 		std::cin.get();
 	}
 	system("cls");
@@ -18,17 +18,17 @@ void awaitUserInput(gameType gameType) {
 }
 
 Board createBoard() {
-	int type = 0;
+	gameType gameType = PVP;
 	int width = 5;
 	int height = 5;
 	int mineCount = 3;
 	int playerCount = 2;
-	type = (getValuesWithinRange("choose game mode (0=PVP, 1=PVE, 2=EVE)", 0, 2)); // not sure if this is good practice
+	gameType = static_cast<::gameType>(getValuesWithinRange("choose game mode (0=PVP, 1=PVE, 2=EVE)", 0, 2)); // not sure if this is good practice
 	width = getValuesWithinRange("choose the width of the field", 5, 20);
 	height = getValuesWithinRange("choose the height of the field", 5, 20);
 	mineCount = getValuesWithinRange("choose the number of mines on the field", 3, 8);
 	playerCount = getValuesWithinRange("choose the number of players", 2, 8);
-	return createBoard(type, width, height, mineCount, playerCount);
+	return createBoard(gameType, width, height, mineCount, playerCount);
 }
 
 namespace boardConsoleDisplayHelper {
@@ -48,14 +48,14 @@ Position getPlayerInputPosition(Board const &board, Player player, RNGPointer RN
 		std::cin >> pos.ypos;
 	} else {
 		pos = getRandomValidPosition(board, player, RNG);
-		std::cout << "\n";
+		std::cout << '\n';
 	}
 	return pos;
 }
 
 void printToPlayer(Player const &player, std::string const &message) { // shows message on console, unless the player is AI, to avoid spammig the console and potentially crashing the program
 	if (!player.isAI) {
-		std::cout << message << "\n";
+		std::cout << message << '\n';
 	}
 }
 void boardConsoleDisplayHelper::showPositionStatus(Board const &board, unsigned int x, unsigned int y, int perspective) {
@@ -121,15 +121,15 @@ void printBoard(Board const &board, int perspective) {
 		for (int x = 1; x <= board.width; x++) { // next to the row label, we print all positions in row
 			boardConsoleDisplayHelper::printColumnInRow(board, x, y, perspective);
 		}
-		std::cout << "\n";
+		std::cout << '\n';
 	}
 }
 
 int getValuesWithinRange(std::string const &prompt, int min, int max) { // function to input an int value within range, used for board initialization, probably could be reporopused for other uses
 	int ret = min - 1;
 	while ((ret < min) || (ret > max)) {
-		std::cout << prompt << "\n";
-		std::cout << "value must be between " << min << " and " << max << "\n";
+		std::cout << prompt << '\n';
+		std::cout << "value must be between " << min << " and " << max << '\n';
 		std::cin >> ret;
 	}
 	return ret;

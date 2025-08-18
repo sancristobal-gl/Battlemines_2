@@ -3,9 +3,9 @@
 namespace gameStages {
 	void roundStart(Board const &board);
 
-	int minePlacement(Board &board, RNGPointer RNG, userInputPointer getPlayerInput);
+	int minePlacement(Board &board, RNGPointer RNG, userInputFunctionPointer getPlayerInput);
 
-	int guessing(Board &board, RNGPointer RNG, userInputPointer getPlayerInput);
+	int guessing(Board &board, RNGPointer RNG, userInputFunctionPointer getPlayerInput);
 
 	int roundEnd(Board &board);
 }
