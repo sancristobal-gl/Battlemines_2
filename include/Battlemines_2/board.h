@@ -62,7 +62,7 @@ struct Board {
 	~Board();
 };
 
-Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount);
+Board createBoard(gameType gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount);
 
 typedef int (*RNGPointer)(int, int);
 
