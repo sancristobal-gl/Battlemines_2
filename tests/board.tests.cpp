@@ -132,7 +132,7 @@ TEST(OperatorTests, mine_EQ_mine) {
 	EXPECT_NE(m1, m2);
 }
 
-TEST(OperatorTests, Mine_EQ_Position) {
+TEST(OperatorTests, mine_EQ_position) {
 	using XType = decltype(Position{}.xpos);
 	using YType = decltype(Position{}.ypos);
 
@@ -155,16 +155,38 @@ TEST(OperatorTests, Mine_EQ_Position) {
 	EXPECT_NE(m, p);
 }
 
-TEST(BoardTest, board_creation) {
-	constexpr int gameTypeValue = -2;
-	constexpr int width = -20;
-	constexpr int height = -20;
-	constexpr int mineCount = -3;
-	constexpr int playerCount = -8;
-	Board board = createBoard(gameTypeValue, width, height, mineCount, playerCount);
-	EXPECT_EQ(board.gameType, static_cast<gameType>(gameTypeValue));
-	ASSERT_TRUE(board.width == width);
-	ASSERT_TRUE(board.height == height);
-	ASSERT_TRUE(board.players.front().mineCount == mineCount);
-	ASSERT_TRUE(board.playerCount == playerCount);
+TEST(BoardTests, invalid_width_too_small) {
+	EXPECT_THROW(
+		createBoard(0, MINWIDTH - 1, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT),
+		std::exception);
+}
+
+TEST(BoardTests, invalid_width_too_large) {
+	EXPECT_THROW(
+		createBoard(0, MAXWIDTH + 1, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT),
+		std::exception);
+}
+
+TEST(BoardTests, invalid_height_too_small) {
+	EXPECT_THROW(
+		createBoard(0, MINWIDTH, MINHEIGHT - 1, MINMINECOUNT, MINPLAYERCOUNT),
+		std::exception);
+}
+
+TEST(BoardTests, invalid_mine_count_too_large) {
+	EXPECT_THROW(
+		createBoard(0, MINWIDTH, MINHEIGHT, MAXMINECOUNT + 1, MINPLAYERCOUNT),
+		std::exception);
+}
+
+TEST(BoardTests, invalid_player_count_too_small) {
+	EXPECT_THROW(
+		createBoard(0, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT - 1),
+		std::exception);
+}
+
+TEST(BoardTests, the_testttt) {
+	EXPECT_THROW(
+		createBoard(-1, -1, -1, -1, -1),
+		std::exception);
 }
