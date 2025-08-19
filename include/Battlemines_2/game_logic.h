@@ -13,3 +13,4 @@ void chooseMinePositions(Board &board, Player &player, RNGPointer RNG, userInput
 bool guess(Board &board, Player &player, RNGPointer RNG, userInputFunctionPointer getPlayerInput);
 
 bool checkMineCollision(Board &board);
+

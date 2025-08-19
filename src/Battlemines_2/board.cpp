@@ -23,6 +23,7 @@ bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, in
 	if (!isValueWithinRange(mineCount, MINMINECOUNT, MAXMINECOUNT)) return false;
 	if (!isValueWithinRange(playerCount, MINPLAYERCOUNT, MAXPLAYERCOUNT)) return false;
 	return true;
+
 }
 
 Board createBoard(gameType gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
