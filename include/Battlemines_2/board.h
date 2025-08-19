@@ -78,8 +78,6 @@ std::vector<Position> generateValidTilesArray(Board const &board);
 
 void removeFromValidTiles(Board &board, Position pos);
 
-void updateValidTilesArray(Board const &board);
-
 std::vector<Mine> getPlayerMines(Board const &board, Player const &player);
 
 void disablePosition(Board &board, Position const &disabledPosition);
