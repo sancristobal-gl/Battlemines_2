@@ -50,7 +50,7 @@ bool guess(Board &board, Player &player, RNGPointer RNG, userInputFunctionPointe
 		if (mine == guess) {
 			if (mine.owner == player.id) {
 				printToPlayer(player, "That's your own mine, silly!"); // el jugador pierde la oportunidad de volver a adivinar
-				
+
 			} else {
 				removeMine(board, mine);
 				printToPlayer(player, "You found an enemy mine!");

@@ -16,7 +16,7 @@ bool isValueWithinRange(int value, int min, int max) {
 	return (value >= min || value <= max);
 }
 
-bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount){
+bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) {
 	if (!isValueWithinRange(width, MINWIDTH, MAXWIDTH)) return false;
 	if (!isValueWithinRange(height, MINHEIGHT, MAXHEIGHT)) return false;
 	if (!isValueWithinRange(mineCount, MINMINECOUNT, MAXMINECOUNT)) return false;
@@ -25,7 +25,7 @@ bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, in
 }
 
 Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
-	if (!isInputValid(gameTypeValue, width, height, mineCount, playerCount)){
+	if (!isInputValid(gameTypeValue, width, height, mineCount, playerCount)) {
 		throw std::exception("Board parameters are invalid");
 	}
 	Board board;

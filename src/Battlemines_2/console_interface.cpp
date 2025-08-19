@@ -1,10 +1,9 @@
-#include "Battlemines_2/board_console.h"
+#include "Battlemines_2/console_interface.h"
 
 const int undefinedPerspective = -1; // perspective represent the player who the board is being printed for
 // a player should be able to see the position of their own hidden mines but not of the other players
 
 const int charsPerLabel = 3;
-
 
 void awaitUserInput(gameType gameType) {
 	std::cin.clear();
@@ -58,12 +57,13 @@ void printToPlayer(Player const &player, std::string const &message) { // shows 
 		std::cout << message << '\n';
 	}
 }
+
 void boardConsoleDisplayHelper::showPositionStatus(Board const &board, unsigned int x, unsigned int y, int perspective) {
 	// print the status of the position {x, y}
 	//(" " = not valid, "O" = valid position with unknown contents, "M" = player mine in position)
 	bool isPositionEnabled = true;
 	Position pos = {x, y};
-	for (Position const &disabledPos: board.disabledPositions) {
+	for (Position const &disabledPos: board.disabledPositions) { // find if position is disabled
 		if (disabledPos == pos) {
 			isPositionEnabled = false;
 			break;
