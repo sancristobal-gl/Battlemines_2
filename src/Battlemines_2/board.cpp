@@ -17,6 +17,7 @@ bool isValueWithinRange(int value, int min, int max) {
 }
 
 bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) {
+	if (! isValueWithinRange(static_cast<int>(gameTypeValue), 0, gameType::SIZE_OF_ENUM - 1)) return false;
 	if (!isValueWithinRange(width, MINWIDTH, MAXWIDTH)) return false;
 	if (!isValueWithinRange(height, MINHEIGHT, MAXHEIGHT)) return false;
 	if (!isValueWithinRange(mineCount, MINMINECOUNT, MAXMINECOUNT)) return false;
@@ -24,7 +25,7 @@ bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, in
 	return true;
 }
 
-Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
+Board createBoard(gameType gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
 	if (!isInputValid(gameTypeValue, width, height, mineCount, playerCount)) {
 		throw std::exception("Board parameters are invalid");
 	}
@@ -40,6 +41,7 @@ Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, in
 		player.isAI = ((board.gameType == PVE) && (p > 0)) || (board.gameType == EVE);
 		board.players.push_back(player);
 	}
+	board.validTiles = generateValidTilesArray(board);
 	return board;
 }
 
@@ -53,7 +55,7 @@ int getRandomValueInRange(int max, int min) {
 }
 
 Position getRandomValidPosition(Board const &board, Player const &player, RNGPointer RNG) { // helper function for bot players
-	std::vector<Position> validTiles = getValidTiles(board);
+	std::vector<Position> validTiles = board.validTiles;
 	std::vector<Mine> playerMines = getPlayerMines(board, player);
 	for (auto it = validTiles.begin(); it != validTiles.end();) { // cursed for-loop, somewhat inefficient
 		bool erase = false;
@@ -101,7 +103,7 @@ int getPlayerPositionInArray(Board const &board, int playerID) { // defined in c
 }
 // gets all possible valid positions
 // mainly for bot logic
-std::vector<Position> getValidTiles(Board const &board) {
+std::vector<Position> generateValidTilesArray(Board const &board) {
 	std::vector<Position> validPositions;
 	for (unsigned int x = 1; x <= board.width; x++) {
 		for (unsigned int y = 1; y <= board.height; y++) {
@@ -112,6 +114,19 @@ std::vector<Position> getValidTiles(Board const &board) {
 		}
 	}
 	return validPositions;
+}
+
+void removeFromValidTiles(Board &board, Position pos) {
+	std::vector<Position>::iterator positionToRemove = board.validTiles.end();
+	for (auto it = board.validTiles.begin(); it != board.validTiles.end(); it++) {
+		if (*it == pos) {
+			positionToRemove = it;
+			break;
+		}
+	}
+	if (positionToRemove != board.validTiles.end()) {
+		board.validTiles.erase(positionToRemove);
+	}
 }
 
 std::vector<Mine> getPlayerMines(Board const &board, Player const &player) {
@@ -125,13 +140,12 @@ std::vector<Mine> getPlayerMines(Board const &board, Player const &player) {
 }
 
 void disablePosition(Board &board, Position const &disabledPosition) {
-	Position pos = disabledPosition;
-	board.disabledPositions.insert(pos);
+	board.disabledPositions.insert(disabledPosition);
+	removeFromValidTiles(board, disabledPosition);
 }
 
 void disablePosition(Board &board, Mine const &disabledMine) {
-	Position pos = disabledMine.position;
-	board.disabledPositions.insert(pos);
+	disablePosition(board, disabledMine.position);
 }
 
 bool removeMine(Board &board, Mine mine) {
@@ -188,9 +202,9 @@ int gameEndCondition(Board &board) {
 			maxPlayerMines = player.mineCount;
 		}
 	}
-	unsigned int tilesRemaining = getValidTiles(board).size();
+	unsigned int tilesRemaining = board.validTiles.size();
 	std::cout << "tiles remaining: " << tilesRemaining << '\n';
-	if ((tilesRemaining < maxPlayerMines) || (getValidTiles(board).size() < board.playerCount)) { // if not enough tiles remain for another turn, the player with the most mines remaining wins
+	if ((tilesRemaining < maxPlayerMines) || (board.validTiles.size() < board.playerCount)) { // if not enough tiles remain for another turn, the player with the most mines remaining wins
 		Player playerWithMaxMines;
 		int winner = 0;
 		for (Player player: board.players) {
