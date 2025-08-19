@@ -190,3 +190,15 @@ TEST(BoardTests, all_invalid_arguments) {
 		createBoard(-1, -1, -1, -1, -1),
 		std::exception);
 }
+
+TEST(BoardTests, invalid_gameType_neg) {
+	EXPECT_THROW(
+		createBoard(-1, 10, 10, 5, 2),
+		std::exception);
+}
+
+TEST(BoardTests, invalid_gameType_outOfRange) {
+	EXPECT_THROW(
+		createBoard(13, 10, 10, 5, 2),
+		std::exception);
+}
