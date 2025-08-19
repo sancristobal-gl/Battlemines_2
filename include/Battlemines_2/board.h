@@ -6,9 +6,9 @@
 #include <vector>
 
 static constexpr int MINWIDTH = 5;
-static constexpr int MAXWIDTH = 20;
+static constexpr int MAXWIDTH = 100;
 static constexpr int MINHEIGHT = 5;
-static constexpr int MAXHEIGHT = 20;
+static constexpr int MAXHEIGHT = 100;
 static constexpr int MINMINECOUNT = 3;
 static constexpr int MAXMINECOUNT = 8;
 static constexpr int MINPLAYERCOUNT = 2;
@@ -46,7 +46,8 @@ struct Player {
 enum gameType {
 	PVP,
 	PVE,
-	EVE
+	EVE,
+	SIZE_OF_ENUM //for checking if casted int value is within enum's range
 };
 
 struct Board {
@@ -56,6 +57,7 @@ struct Board {
 	std::vector<Player> players;
 	unsigned int playerCount = 0;
 	std::vector<Mine> placedMines;
+	std::vector<Position> validTiles;
 	gameType gameType = PVP;
 	~Board();
 };
@@ -72,7 +74,11 @@ void placeMine(Board &board, Mine mine);
 
 bool isPositionValid(Board const &board, Position const &pos);
 
-std::vector<Position> getValidTiles(Board const &board);
+std::vector<Position> generateValidTilesArray(Board const &board);
+
+void removeFromValidTiles(Board &board, Position pos);
+
+void updateValidTilesArray(Board const &board);
 
 std::vector<Mine> getPlayerMines(Board const &board, Player const &player);
 
