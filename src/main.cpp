@@ -45,7 +45,7 @@ int main() {
 	Board board = createBoard();
 #endif
 	userInputFunctionPointer getPlayerInput = getPlayerInputPosition;
-	RNGPointer RNG = getRandomValueInRange; //pointer to random number generator function
+	RNGPointer RNG = getRandomValueInRange; // pointer to random number generator function
 	int winner = gameLoop(board, RNG, getPlayerInput);
 	if (winner != 0) {
 		std::cout << "The winner is: player " << winner << ", Congratulations!\n";
