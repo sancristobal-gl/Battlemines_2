@@ -16,7 +16,7 @@ bool isValueWithinRange(int value, int min, int max) {
 	return (value >= min || value <= max);
 }
 
-bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount){
+bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) {
 	if (!isValueWithinRange(width, MINWIDTH, MAXWIDTH)) return false;
 	if (!isValueWithinRange(height, MINHEIGHT, MAXHEIGHT)) return false;
 	if (!isValueWithinRange(mineCount, MINMINECOUNT, MAXMINECOUNT)) return false;
@@ -25,7 +25,7 @@ bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, in
 }
 
 Board createBoard(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) { // overloaded instead of merging into one function because once requires player input and the other doesn't
-	if (!isInputValid(gameTypeValue, width, height, mineCount, playerCount)){
+	if (!isInputValid(gameTypeValue, width, height, mineCount, playerCount)) {
 		throw std::exception("Board parameters are invalid");
 	}
 	Board board;
@@ -189,7 +189,7 @@ int gameEndCondition(Board &board) {
 		}
 	}
 	unsigned int tilesRemaining = getValidTiles(board).size();
-	std::cout << "tiles remaining: " << tilesRemaining << "\n";
+	std::cout << "tiles remaining: " << tilesRemaining << '\n';
 	if ((tilesRemaining < maxPlayerMines) || (getValidTiles(board).size() < board.playerCount)) { // if not enough tiles remain for another turn, the player with the most mines remaining wins
 		Player playerWithMaxMines;
 		int winner = 0;
@@ -201,8 +201,8 @@ int gameEndCondition(Board &board) {
 				winner = 0;
 			}
 		}
-		std::cout << "Not enough tiles remain to continue playing, the player with the greatest amount of mines remaining is the winner" << "\n";
-		std::cout << "(Unless two or more players share the highest mine count, in which case it's a draw)" << "\n";
+		std::cout << "Not enough tiles remain to continue playing, the player with the greatest amount of mines remaining is the winner\n";
+		std::cout << "(Unless two or more players share the highest mine count, in which case it's a draw)\n";
 		return winner;
 	}
 

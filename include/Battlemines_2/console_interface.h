@@ -1,7 +1,7 @@
 #include "board.h"
 #include <functional>
 
-typedef Position (*userInputPointer)(Board const &, Player , RNGPointer );
+typedef Position (*userInputFunctionPointer)(Board const &, Player , RNGPointer );
 
 void awaitUserInput(gameType gameType);
 
