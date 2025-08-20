@@ -193,7 +193,7 @@ TEST(BoardTests, multiple_invalid_arguments) {
 
 TEST(gameEndConditionTests, players_with_no_mines) {
 	Board testBoard = createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT);
-	for (Player player : testBoard.players) {
+	for (Player& player : testBoard.players) {
 		player.mineCount = 0;
 	}
 	eliminatePlayers(testBoard);
@@ -202,7 +202,7 @@ TEST(gameEndConditionTests, players_with_no_mines) {
 
 TEST(gameEndConditionTests, one_player_with_mines) {
 	Board testBoard = createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT);
-	for (Player player : testBoard.players) {
+	for (Player& player : testBoard.players) {
 		player.mineCount = 0;
 	}
 	int playerId = testBoard.players[0].id;
