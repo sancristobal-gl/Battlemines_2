@@ -2,7 +2,7 @@
 
 #include "Battlemines_2/board.h"
 
-gameType gameTypeValue = gameType::PVP;
+const gameType gameTypeValue = static_cast<gameType>((gameType::SIZE_OF_ENUM) - 1);
 const int width = 20;
 const int height = 20;
 const int mineCount = 3;
