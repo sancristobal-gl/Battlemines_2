@@ -121,7 +121,6 @@ std::string boardConsoleDisplayHelper::printColumnInRow(Board const &board, unsi
 // print board to console
 // may be depreciated if an UI is implemented in the future
 void printBoard(Board const &board, int perspective) {
-	/*
 	std::ostringstream oss;
 	for (int y = 0; y <= board.height; y++) { // for each row
 		oss << boardConsoleDisplayHelper::printRow(board, y);
@@ -131,7 +130,7 @@ void printBoard(Board const &board, int perspective) {
 		oss << '\n';
 	}
 	std::cout << oss.str();
-	oss.flush();*/
+	oss.flush();
 }
 
 int getValuesWithinRange(std::string const &prompt, int min, int max) { // function to input an int value within range, used for board initialization, probably could be reporopused for other uses
