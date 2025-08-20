@@ -13,7 +13,7 @@ bool Mine::operator==(const Position &b) const {
 }
 
 bool isValueWithinRange(int value, int min, int max) {
-	return (value >= min || value <= max);
+	return (value >= min && value <= max);
 }
 
 bool isInputValid(int gameTypeValue, unsigned int width, unsigned int height, int mineCount, int playerCount) {

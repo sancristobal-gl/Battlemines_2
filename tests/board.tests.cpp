@@ -2,7 +2,7 @@
 
 #include "Battlemines_2/board.h"
 
-const int gameTypeValue = 2;
+gameType gameTypeValue = gameType::PVP;
 const int width = 20;
 const int height = 20;
 const int mineCount = 3;
@@ -157,48 +157,60 @@ TEST(OperatorTests, mine_EQ_position) {
 
 TEST(BoardTests, invalid_width_too_small) {
 	EXPECT_THROW(
-		createBoard(0, MINWIDTH - 1, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT),
+		createBoard(gameType::PVP, MINWIDTH - 1, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT),
 		std::exception);
 }
 
 TEST(BoardTests, invalid_width_too_large) {
 	EXPECT_THROW(
-		createBoard(0, MAXWIDTH + 1, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT),
+		createBoard(gameType::PVP, MAXWIDTH + 1, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT),
 		std::exception);
 }
 
 TEST(BoardTests, invalid_height_too_small) {
 	EXPECT_THROW(
-		createBoard(0, MINWIDTH, MINHEIGHT - 1, MINMINECOUNT, MINPLAYERCOUNT),
+		createBoard(gameType::PVP, MINWIDTH, MINHEIGHT - 1, MINMINECOUNT, MINPLAYERCOUNT),
 		std::exception);
 }
 
 TEST(BoardTests, invalid_mine_count_too_large) {
 	EXPECT_THROW(
-		createBoard(0, MINWIDTH, MINHEIGHT, MAXMINECOUNT + 1, MINPLAYERCOUNT),
+		createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MAXMINECOUNT + 1, MINPLAYERCOUNT),
 		std::exception);
 }
 
 TEST(BoardTests, invalid_player_count_too_small) {
 	EXPECT_THROW(
-		createBoard(0, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT - 1),
+		createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT - 1),
 		std::exception);
 }
 
-TEST(BoardTests, all_invalid_arguments) {
+TEST(BoardTests, multiple_invalid_arguments) {
 	EXPECT_THROW(
-		createBoard(-1, -1, -1, -1, -1),
+		createBoard(gameType::PVP, 0, 0, -1, -1),
 		std::exception);
 }
 
-TEST(BoardTests, invalid_gameType_neg) {
-	EXPECT_THROW(
-		createBoard(-1, 10, 10, 5, 2),
-		std::exception);
+TEST(gameEndConditionTests, players_with_no_mines) {
+	Board testBoard = createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT);
+	for (Player player : testBoard.players) {
+		player.mineCount = 0;
+	}
+	eliminatePlayers(testBoard);
+	EXPECT_EQ(gameEndCondition(testBoard), 0);
 }
 
-TEST(BoardTests, invalid_gameType_outOfRange) {
-	EXPECT_THROW(
-		createBoard(13, 10, 10, 5, 2),
-		std::exception);
+TEST(gameEndConditionTests, one_player_with_mines) {
+	Board testBoard = createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT);
+	for (Player player : testBoard.players) {
+		player.mineCount = 0;
+	}
+	int playerId = testBoard.players[0].id;
+	testBoard.players[0].mineCount = 1;
+	eliminatePlayers(testBoard);
+	EXPECT_EQ(gameEndCondition(testBoard), playerId);
+}
+TEST(gameEndConditionTests, players_with_mines) {
+	Board testBoard = createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT);
+	EXPECT_EQ(gameEndCondition(testBoard), -1);
 }
