@@ -61,7 +61,7 @@ void printToPlayer(Player const &player, std::string const &message) { // shows 
 std::string boardConsoleDisplayHelper::showPositionStatus(Board const &board, unsigned int x, unsigned int y, int perspective) {
 	// print the status of the position {x, y}
 	//(" " = not valid, "O" = valid position with unknown contents, "M" = player mine in position)
-	std::ostringstream oss;
+	std::string positionStatus;
 	bool isPositionEnabled = true;
 	Position pos = {x, y};
 	for (Position const &disabledPos: board.disabledPositions) { // find if position is disabled
@@ -82,45 +82,46 @@ std::string boardConsoleDisplayHelper::showPositionStatus(Board const &board, un
 		}
 	}
 	if (mineInPos == true)
-		oss << "  M";
+		positionStatus = "  M";
 	else if (isPositionEnabled == false)
-		oss << "   ";
+		positionStatus = "   ";
 	else if (isPositionEnabled == true)
-		oss << "  O";
-	return oss.str();
+		positionStatus = "  O";
+	return positionStatus;
 }
 
 std::string boardConsoleDisplayHelper::printRow(Board const &board, unsigned int y) {
-	std::ostringstream oss;
-	int spaceLength = (charsPerLabel - std::to_string(y).length());
+	std::string row;
+	int spaceLength = (charsPerLabel - floor(log10(y)));
 	if (y == 0) { // if is first row, we print empty space
-		oss << "   ";
+		row.append("   ");
 	} else { // else, print row label
-		oss << y;
+		row.append(std::to_string(y));
 		for (int space = 0; space < spaceLength; space++) {
-			oss << ' ';
+			row.append(" ");
 		}
 	}
-	return oss.str();
+	return row;
 }
 
 std::string boardConsoleDisplayHelper::printColumnInRow(Board const &board, unsigned int x, unsigned int y, int perspective) {
-	std::ostringstream oss;
+	std::string column = "";
 	int spaceLength = (charsPerLabel - std::to_string(x).length());
 	if (y == 0) { // if it's first column, we print column label
 		for (int space = 0; space < spaceLength; space++) {
-			oss << ' ';
+			column.append(" ");
 		};
-		oss << std::to_string(x);
+		column.append(std::to_string(x));
 	} else { // else, print position status
-		oss << boardConsoleDisplayHelper::showPositionStatus(board, x, y, perspective);
+		column.append(boardConsoleDisplayHelper::showPositionStatus(board, x, y, perspective));
 	}
-	return oss.str();
+	return column;
 }
 
 // print board to console
 // may be depreciated if an UI is implemented in the future
 void printBoard(Board const &board, int perspective) {
+	/*
 	std::ostringstream oss;
 	for (int y = 0; y <= board.height; y++) { // for each row
 		oss << boardConsoleDisplayHelper::printRow(board, y);
@@ -130,7 +131,7 @@ void printBoard(Board const &board, int perspective) {
 		oss << '\n';
 	}
 	std::cout << oss.str();
-	oss.flush();
+	oss.flush();*/
 }
 
 int getValuesWithinRange(std::string const &prompt, int min, int max) { // function to input an int value within range, used for board initialization, probably could be reporopused for other uses
