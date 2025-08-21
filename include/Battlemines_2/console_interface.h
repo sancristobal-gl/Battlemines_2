@@ -1,4 +1,5 @@
 #include "board.h"
+#include <sstream>
 #include <functional>
 
 typedef Position (*userInputFunctionPointer)(Board const &, Player , RNGPointer );
