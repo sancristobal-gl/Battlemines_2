@@ -16,6 +16,7 @@ TEST(Placement, board_is_created_properly) {
 	ASSERT_TRUE(board.height == height);
 	ASSERT_TRUE(board.players.front().mineCount == mineCount);
 	ASSERT_TRUE(board.playerCount == playerCount);
+	ASSERT_TRUE(board.playerCount == board.players.size());
 }
 TEST(Placement, placed_mines_are_in_board) {
 	Board board = createBoard(gameTypeValue, width, height, mineCount, playerCount);
@@ -213,4 +214,40 @@ TEST(gameEndConditionTests, one_player_with_mines) {
 TEST(gameEndConditionTests, players_with_mines) {
 	Board testBoard = createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT);
 	EXPECT_EQ(gameEndCondition(testBoard), -1);
+}
+
+TEST(eliminatePlayers, eliminates_zero_players) {
+	Board testBoard = createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT);
+	unsigned int boardPlayerCount = testBoard.playerCount;
+	unsigned int boardPlayerVectorCount = testBoard.players.size();
+	EXPECT_EQ(boardPlayerCount, boardPlayerVectorCount);
+	eliminatePlayers(testBoard);
+	EXPECT_EQ(boardPlayerCount, boardPlayerVectorCount);
+	EXPECT_EQ(boardPlayerCount, testBoard.playerCount);
+	EXPECT_EQ(boardPlayerVectorCount, testBoard.players.size());
+}
+
+TEST(eliminatePlayers, eliminates_all_but_one_player) {
+	Board testBoard = createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT);
+	EXPECT_EQ(testBoard.playerCount, testBoard.players.size());
+	for (Player &player: testBoard.players) {
+		player.mineCount = 0;
+	}
+	testBoard.players[0].mineCount = 1;
+	eliminatePlayers(testBoard);
+	EXPECT_EQ(testBoard.playerCount, testBoard.players.size());
+	EXPECT_EQ(1, testBoard.playerCount);
+	EXPECT_EQ(1, testBoard.players.size());
+}
+
+TEST(eliminatePlayers, eliminates_all_players) {
+	Board testBoard = createBoard(gameType::PVP, MINWIDTH, MINHEIGHT, MINMINECOUNT, MINPLAYERCOUNT);
+	EXPECT_EQ(testBoard.playerCount, testBoard.players.size());
+	for (Player &player: testBoard.players) {
+		player.mineCount = 0;
+	}
+	eliminatePlayers(testBoard);
+	EXPECT_EQ(testBoard.playerCount, testBoard.players.size());
+	EXPECT_EQ(0, testBoard.playerCount);
+	EXPECT_EQ(0, testBoard.players.size());
 }
